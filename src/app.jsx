@@ -1,5 +1,5 @@
 import styles from './app.module.css';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useStore, sendData } from './utils';
 import { EMAIL_REGEXP, PASSWORD_REGEXP } from './consts';
 
@@ -8,6 +8,7 @@ export const App = () => {
 	const [emailError, setEmailError] = useState(null);
 	const [passwordError, setPasswordError] = useState(null);
 	const [repeatPassError, setRepeatPassError] = useState(null);
+	const submitButtonRef = useRef(null);
 
 	const { email, password, repeatPass } = getState();
 
@@ -19,11 +20,8 @@ export const App = () => {
 		let errorRepeatPasswordMessage = null;
 		switch (target.name) {
 			case 'email':
-				if (!EMAIL_REGEXP.test(target.value)) {
-					errorEmailMessage =
-						'Неверный E-mail. Введите стандартный формат электронной почты';
-				} else if (target.value.length > 20) {
-					errorEmailMessage = 'Неверный email. Введите не больше 20 символов';
+				if (target.value.length > 20) {
+					errorEmailMessage = 'Неверный E-mail. Введите не больше 20 символов.';
 				}
 				setEmailError(errorEmailMessage);
 				break;
@@ -45,6 +43,9 @@ export const App = () => {
 					errorRepeatPasswordMessage =
 						'Неверный пароль. Введите не больше 20 символов.';
 				}
+				if (target.value.length === 8) {
+					submitButtonRef.current.focus();
+				}
 				setRepeatPassError(errorRepeatPasswordMessage);
 				break;
 		}
@@ -56,8 +57,11 @@ export const App = () => {
 		let errorRepeatPasswordMessage = null;
 		switch (target.name) {
 			case 'email':
-				if (target.value.length < 3) {
-					errorEmailMessage = 'Неверный email. Введите не менее 3-х символов.';
+				if (!EMAIL_REGEXP.test(target.value)) {
+					errorEmailMessage =
+						'Неверный E-mail. Введите стандартный формат электронной почты.';
+				} else if (target.value.length < 3) {
+					errorEmailMessage = 'Неверный E-mail. Введите не менее 3-х символов.';
 				}
 				setEmailError(errorEmailMessage);
 				break;
@@ -123,6 +127,7 @@ export const App = () => {
 				/>
 				<button
 					type="submit"
+					ref={submitButtonRef}
 					disabled={
 						emailError !== null ||
 						passwordError !== null ||
