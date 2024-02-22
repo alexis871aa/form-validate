@@ -1,0 +1,16 @@
+.app {
+	margin-top: 50px;
+}
+
+.errorMessage {
+	color: red;
+}
+
+form {
+	display: flex;
+	flex-direction: column;
+	width: 300px;
+	margin: auto;
+	justify-content: center;
+	gap: 10px;
+}
